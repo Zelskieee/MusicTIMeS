@@ -1,0 +1,314 @@
+* { 
+    font-family: "Freeman", sans-serif;
+} 
+
+body {
+    font-family: Arial Narrow;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    background-color: #f4f4f4;
+}
+
+header {
+    background-color: #F8F6F0;
+    color: black;
+    padding: 15px;
+    text-align: center;
+    flex-shrink: 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+#logo {
+    max-width: 150px;
+    height: auto;
+}
+
+h1 {
+    margin: 0;
+    font-size: 1.5em;
+    display: flex;
+    align-items: center;
+}
+
+span {
+    font-weight: normal;
+    font-size: 0.8em;
+    margin-left: 5px;
+}
+
+.header-options {
+    display: flex;
+    align-items: center;
+}
+
+.language-dropdown,
+.profile-option,
+.logout-option {
+    margin-left: 20px;
+}
+
+.language-dropdown a,
+.profile-option a,
+.logout-option a {
+    color: black; 
+}
+
+select {
+    padding: 8px;
+    border: none;
+    border-radius: 4px;
+}
+
+a {
+    color: white;
+    text-decoration: none;
+}
+
+header span {
+    font-size: large;
+}
+
+.logout-button {
+    --black: #000000;
+    --ch-black: #141414;
+    --eer-black: #1b1b1b;
+    --night-rider: #2e2e2e;
+    --white: #ffffff;
+    --af-white: #f3f3f3;
+    --ch-white: #e1e1e1;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    width: 45px;
+    height: 45px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    transition-duration: .3s;
+    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.199);
+    background-color: var(--af-white);
+}
+
+/* plus sign */
+.sign {
+    width: 100%;
+    transition-duration: .3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.sign svg {
+    width: 17px;
+}
+
+.sign svg path {
+    fill: var(--night-rider);
+}
+/* text */
+.text {
+    position: absolute;
+    right: 0%;
+    width: 0%;
+    opacity: 0;
+    color: var(--night-rider);
+    font-size: 1.2em;
+    font-weight: 600;
+    transition-duration: .3s;
+}
+/* hover effect on button width */
+.logout-button:hover {
+    width: 125px;
+    border-radius: 5px;
+    transition-duration: .3s;
+}
+
+.logout-button:hover .sign {
+    width: 30%;
+    transition-duration: .3s;
+    padding-left: 20px;
+}
+/* hover effect button's text */
+.logout-button:hover .text {
+    opacity: 1;
+    width: 70%;
+    transition-duration: .3s;
+    padding-right: 10px;
+}
+/* button click effect*/
+.logout-button:active {
+    transform: translate(2px ,2px);
+}
+
+main {
+    display: flex;
+    flex: 1;
+    background-color: #fff;
+}
+
+aside {
+    background-color: #EFEFEF;
+    color: black;
+    padding: 10px;
+    text-align: center;
+    width: 200px;
+    font-weight: bold;
+    font-size: 25px;
+}
+
+nav ul {
+    padding: 0;
+    list-style: none;
+}
+
+nav li {
+    margin-bottom: 5px;
+}
+
+nav a {
+    color: #5B5959;
+    text-decoration: none;
+    font-weight: none;
+    font-size: 14px;
+}
+
+nav a:hover {
+    color: black;
+    font-weight: bold;
+    font-size: 14px;
+}
+
+section {
+    flex: 1;
+    padding: 20px;
+}
+
+footer {
+    color: #C7C5C5;
+    font-weight: bold;
+    padding: 10px;
+    text-align: center;
+    flex-shrink: 0;
+    margin-top: auto;
+}
+
+.btn-container {
+    display: table-cell;
+    vertical-align: middle;
+    text-align: center;
+}
+
+.btn-language-mode-switch {
+    display: inline-block;
+    margin: 0px;
+    position: relative;
+}
+
+.btn-language-mode-switch > label.btn-language-mode-switch-inner {
+    margin: 0px;
+    width: 140px;
+    height: 40px;
+    background-color: #f0ede9;
+    border-radius: 26px;
+    overflow: hidden;
+    position: relative;
+    transition: all 0.3s ease;
+        /*box-shadow: 0px 0px 8px 0px rgba(17, 17, 17, 0.34) inset;*/
+    display: block;
+}
+
+.btn-language-mode-switch > label.btn-language-mode-switch-inner:before {
+    content: attr(data-on);
+    position: absolute;
+    font-size: 20px;
+    font-weight: 600;
+    right: 25px;
+    color: #222;
+}
+
+.btn-language-mode-switch > label.btn-language-mode-switch-inner:after {
+    content: attr(data-off);
+    width: 67px;
+    height: 35px;
+    left: 2px;
+    background: #fff;
+    border-radius: 26px;
+    position: absolute;
+    font-size: 20px;
+    display: flex;
+    justify-content: center;
+    text-align: center;
+    transition: all 0.3s ease;
+    box-shadow: 0px 0px 6px -2px #111;
+    padding: 5px 0px;
+    color: #222;
+    font-weight: 600;
+    align-items: center;
+}
+
+.btn-language-mode-switch input[type="checkbox"] {
+    cursor: pointer;
+    width: 50px;
+    height: 25px;
+    opacity: 0;
+    position: absolute;
+    top: 0;
+    z-index: 1;
+    margin: 0px;
+}
+
+.btn-language-mode-switch input[type="checkbox"]:checked + label.btn-language-mode-switch-inner {
+    background-color: #f0ede9;
+}
+
+.btn-language-mode-switch input[type="checkbox"]:checked + label.btn-language-mode-switch-inner:after {
+    content: attr(data-on);
+    left: 68px;
+}
+
+.btn-language-mode-switch input[type="checkbox"]:checked + label.btn-language-mode-switch-inner:before {
+    content: attr(data-off);
+    right: auto;
+    left: 23px;
+}
+
+.rounded-border {
+    border-radius: 100px;
+    border: 2px solid #000;
+}
+
+.profile-option {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px;
+    background-color: #F8F6F0;
+    border-radius: 10px;
+}
+
+.profile-info {
+    display: flex;
+    align-items: center;
+}
+
+.profile-image img {
+    width: 25%; /* Adjust the size as needed */
+    height: 25%; /* Adjust the size as needed */
+    max-width: 40px; /* Set a maximum width */
+    max-height: 40px; /* Set a maximum height */
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+.enterprise-name {
+    font-weight: bold;
+    margin: 0;
+}
