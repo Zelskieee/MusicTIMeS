@@ -1,47 +1,60 @@
 <?php
+session_start();
 include 'db.php';
 
-session_start();
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
 
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $otp = $_POST['otp'];
+// Function to sanitize inputs
+function validate_input($data) {
+    return htmlspecialchars(stripslashes(trim($data)));
+}
 
-    if ($otp == $_SESSION['otp']) {
-        $customer_name = $_SESSION['customer_name'];
-        $customer_username = $_SESSION['customer_username'];
-        $customer_email = $_SESSION['customer_email'];
-        $customer_password = $_SESSION['customer_password'];
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['verify_otp'])) {
+    // Sanitize inputs
+    $submitted_otp = validate_input($_POST['otp']);
+    $customer_email = $_SESSION['customer_email'];
 
-        // Hash the password
-        $hashed_password = password_hash($customer_password, PASSWORD_DEFAULT);
+    // Check OTP in the database
+    $check_query = "SELECT * FROM customers WHERE customer_email = ? AND otp = ?";
+    $stmt = $conn->prepare($check_query);
+    if ($stmt) {
+        $stmt->bind_param("ss", $customer_email, $submitted_otp);
+        $stmt->execute();
+        $result = $stmt->get_result();
 
-        // Insert data into the database
-        $query = "INSERT INTO customers (customer_name, customer_username, customer_email, customer_password) VALUES (?, ?, ?, ?)";
-        $stmt = $conn->prepare($query);
-        if ($stmt) {
-            $stmt->bind_param("ssss", $customer_name, $customer_username, $customer_email, $hashed_password);
-            if ($stmt->execute()) {
-                // Registration successful
-                echo "<script>alert('Registration successful'); 
-                window.location.href='index.php';</script>";
-                exit();
+        if ($result->num_rows > 0) {
+            // OTP is correct, update verification status
+            $update_query = "UPDATE customers SET is_verified = 1, otp = NULL, verified_at = NOW() WHERE customer_email = ?";
+            $update_stmt = $conn->prepare($update_query);
+            if ($update_stmt) {
+                $update_stmt->bind_param("s", $customer_email);
+                if ($update_stmt->execute()) {
+                    // Verification successful
+                    echo "<script>alert('Verification successful'); 
+                    window.location.href='index.php';</script>";
+                    exit();
+                } else {
+                    $errors[] = "Error: " . $update_stmt->error;
+                }
+                $update_stmt->close();
             } else {
-                echo "Error: " . $stmt->error;
+                $errors[] = "Database error: Failed to prepare update statement.";
             }
-            $stmt->close();
         } else {
-            echo "Database error: Failed to prepare statement.";
+            // OTP is incorrect
+            $errors[] = "Invalid OTP. Please try again.";
         }
-
-        // Clear session
-        unset($_SESSION['otp']);
-        unset($_SESSION['customer_name']);
-        unset($_SESSION['customer_username']);
-        unset($_SESSION['customer_email']);
-        unset($_SESSION['customer_password']);
+        $stmt->close();
     } else {
-        echo "<script>alert('Invalid OTP'); 
-        window.location.href='register.php';</script>";
+        $errors[] = "Database error: Failed to prepare check statement.";
+    }
+
+    // If there are errors, redirect back to the OTP form with error messages
+    if (!empty($errors)) {
+        $error_message = implode(" ", $errors);
+        header("Location: register.php?error=" . urlencode($error_message));
         exit();
     }
 } else {

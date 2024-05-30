@@ -4,6 +4,8 @@ include './layout/main.php';
 error_reporting(E_ALL); 
 ini_set('display_errors', 1);
 
+include '../db.php';
+
 // Start the session if not already started
 if (session_status() == PHP_SESSION_NONE) {
     session_start();
