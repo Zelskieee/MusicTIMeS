@@ -90,9 +90,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $stmt->bind_param("sssss", $enterprise_name, $enterprise_username, $enterprise_email, $certificate_path, $hashed_password);
 
             if ($stmt->execute()) {
-                // Registration success, redirect to login page
-                echo "<script>alert('Registration successful'); 
-                window.location.href='login_enterprise.php';</script>";
+                // Registration success, redirect to OTP page
+                header("Location: send_otp_enterprise.php?enterprise_email=" . urlencode($enterprise_email));
                 exit();
             } else {
                 $errors[] = "Failed to register enterprise. Please try again.";

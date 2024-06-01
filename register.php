@@ -49,59 +49,10 @@
             transform: translateY(10px);
             transition: 100ms;
         }
-
-        .otp-popup {
-            display: none;
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background-color: white;
-            padding: 20px;
-            border: 1px solid #dedfdb;
-            box-shadow: rgb(0 0 0 / 5%) 0 0 8px;
-            z-index: 1000;
-        }
-
-        .otp-popup input {
-            margin-top: 10px;
-        }
     </style>
-    <script>
-        function showOTPForm() {
-            document.getElementById('otp-popup').style.display = 'block';
-        }
-
-        function hideOTPForm() {
-            document.getElementById('otp-popup').style.display = 'none';
-        }
-
-        function submitForm(event) {
-            event.preventDefault();
-
-            var formData = new FormData(document.querySelector('.registration-form'));
-
-            document.getElementById('otp-customer_name').value = formData.get('customer_name');
-            document.getElementById('otp-customer_username').value = formData.get('customer_username');
-            document.getElementById('otp-customer_email').value = formData.get('customer_email');
-            document.getElementById('otp-customer_password').value = formData.get('customer_password');
-
-            var xhr = new XMLHttpRequest();
-            xhr.open('POST', 'send_otp.php', true);
-            xhr.onload = function () {
-                if (xhr.status === 200) {
-                    showOTPForm();
-                } else {
-                    alert('An error occurred. Please try again.');
-                }
-            };
-            xhr.send(formData);
-        }
-    </script>
-</head>
 <body>
 
-<form action="send_otp.php" method="post" class="registration-form" onsubmit="submitForm(event)">
+<form action="insert.php" method="post" class="registration-form">
 
     <div class="image-container">
         <img src="./image/logo.png" alt="Registration Image" width="300px" height="100px">
@@ -136,20 +87,6 @@
     <p>Already have an account? <a href="index.php" class="a">Click here</a>.</p>
 
 </form>
-
-<div id="otp-popup" class="otp-popup">
-    <form action="verify_otp.php" method="post">
-        <h2>Enter OTP</h2>
-        <label for="otp">OTP</label>
-        <input type="text" name="otp" id="otp" required>
-        <input type="hidden" name="customer_name" id="otp-customer_name">
-        <input type="hidden" name="customer_username" id="otp-customer_username">
-        <input type="hidden" name="customer_email" id="otp-customer_email">
-        <input type="hidden" name="customer_password" id="otp-customer_password">
-        <input type="submit" value="Verify OTP">
-        <button type="button" onclick="hideOTPForm()">Cancel</button>
-    </form>
-</div>
 
 <script>
     function checkPasswordStrength() {

@@ -1,4 +1,10 @@
-<?php include './layout/main.php'; ?>
+<?php 
+include './layout/main.php'; 
+require '../vendor/autoload.php'; // Adjust the path as necessary
+
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+?>
 <head>
     <script src="https://kit.fontawesome.com/641ebcf430.js" crossorigin="anonymous"></script>
     <link href="https://fonts.googleapis.com/css2?family=Delius&family=Freeman&family=Poppins:wght@200&family=Roboto:wght@500&display=swap" rel="stylesheet">
@@ -148,11 +154,42 @@
             $stmt->bind_param("si", $tracking_number, $ship_order_id);
 
             if ($stmt->execute()) {
-                echo "<script>
-                    alert('Order status updated to Shipping');
-                    window.location.href = window.location.pathname;
-                    </script>";
-                exit();
+                $customer_email_query = "SELECT customer_email FROM customers WHERE customer_id = (SELECT customer_id FROM `order` WHERE order_id = $ship_order_id)";
+                $customer_email_result = $conn->query($customer_email_query);
+                $customer_email_row = $customer_email_result->fetch_assoc();
+                $customer_email = $customer_email_row['customer_email'];
+
+                $mail = new PHPMailer(true);
+                try {
+                    $mail->isSMTP();
+                    $mail->Host = 'smtp.gmail.com';
+                    $mail->Port = 587;
+                    $mail->SMTPSecure = 'tls';
+                    $mail->SMTPAuth = true;
+                    $mail->Username = 'musictimessystem@gmail.com';
+                    $mail->Password = 'kppuqpaokzlwtcww';
+                    $mail->setFrom('noreply@musictimessystem.com', 'MusicTIMeS');
+                    $mail->addAddress($customer_email);
+
+                    $mail->isHTML(true);
+                    $mail->Subject = 'Your Order Start Shipping';
+                    $mailContent = "<h1>Your order start shipping today, go to Track Order page to see location of the postage</h1>
+                                    <p>Thank you for ordering through MusicTIMeS</p> <br>
+                                    <p>Best regards,<br><span style=\"font-weight: bold;\">MusicTIMeS</span></p>";
+                    $mail->Body = $mailContent;
+
+                    if ($mail->send()) {
+                        echo "<script>
+                            alert('Order status updated to Shipping and email sent to customer');
+                            window.location.href = window.location.pathname;
+                            </script>";
+                        exit();
+                    } else {
+                        echo "Email could not be sent. Mailer Error: " . $mail->ErrorInfo;
+                    }
+                } catch (Exception $e) {
+                    echo "Mailer Error: " . $mail->ErrorInfo;
+                }
             } else {
                 echo "<script>alert('Error updating order status: " . $stmt->error . "');</script>";
             }
@@ -221,17 +258,16 @@
                             </td>
                             <td><?=number_format($totalAmount, 2)?></td>
                             <td class="order-status-<?= strtolower($order['order_status']) ?>">
-    <?php 
-        if ($order['order_status'] == 'Complete') {
-            echo '<span style="color: green; font-weight: bold; font-size: 18px;">' . __('complete') . '</span>';
-        } else if ($order['order_status'] == 'Preparing') {
-            echo '<span style="font-weight: bold; font-size: 18px;">' . __('preparing') . '</span>';
-        } else if ($order['order_status'] == 'Shipping') {
-            echo '<span style="font-weight: bold; font-size: 18px;">' . __('ship') . '</span>';
-        }
-    ?>
-</td>
-
+                                <?php 
+                                    if ($order['order_status'] == 'Complete') {
+                                        echo '<span style="color: green; font-weight: bold; font-size: 18px;">' . __('complete') . '</span>';
+                                    } else if ($order['order_status'] == 'Preparing') {
+                                        echo '<span style="font-weight: bold; font-size: 18px;">' . __('preparing') . '</span>';
+                                    } else if ($order['order_status'] == 'Shipping') {
+                                        echo '<span style="font-weight: bold; font-size: 18px;">' . __('ship') . '</span>';
+                                    }
+                                ?>
+                            </td>
                             <td><?=$order['created_order']?></td>
                             <td><?=$order['updated_order']?></td>
                             <td>

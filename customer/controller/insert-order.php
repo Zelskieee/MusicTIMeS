@@ -1,6 +1,9 @@
 <?php
 // Establish database connection (assuming $conn is your database connection object)
 include '../../db.php';
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+
 session_start();
 
 ini_set('display_errors', 1);
@@ -14,6 +17,19 @@ if (!isset($_SESSION['customer_id'])) {
 
 $customer_id = $_SESSION['customer_id'];
 
+// Retrieve customer email from database
+$sql_email = "SELECT customer_email FROM customers WHERE customer_id = ?";
+$stmt_email = $conn->prepare($sql_email);
+$stmt_email->bind_param("i", $customer_id);
+$stmt_email->execute();
+$result_email = $stmt_email->get_result();
+
+if ($result_email->num_rows > 0) {
+    $customer_email = $result_email->fetch_assoc()['customer_email'];
+} else {
+    die("Customer email not found.");
+}
+
 // Query to get the products in the cart grouped by enterprise_id
 $sql = "SELECT c.product_id, c.cart_quantity, p.product_price, p.enterprise_id
         FROM cart c
@@ -24,7 +40,7 @@ $result = $conn->query($sql);
 
 if ($result->num_rows > 0) {
     $orders = [];
-    
+
     // Group products by enterprise_id
     while ($row = $result->fetch_assoc()) {
         $enterprise_id = $row['enterprise_id'];
@@ -98,6 +114,37 @@ if ($result->num_rows > 0) {
 
     if (!$stmt->execute()) {
         die("Error clearing cart: " . $stmt->error);
+    }
+
+    // Send order notification email
+    require '../../vendor/autoload.php'; // Adjust the path as necessary
+    $mail = new PHPMailer(true);
+    try {
+        $mail->isSMTP();
+        $mail->Host = 'smtp.gmail.com';
+        $mail->Port = 587;
+        $mail->SMTPSecure = 'tls';
+        $mail->SMTPAuth = true;
+        $mail->Username = 'musictimessystem@gmail.com';
+        $mail->Password = 'kppuqpaokzlwtcww';
+        $mail->setFrom('noreply@musictimessystem.com', 'MusicTIMeS');
+        $mail->addAddress($customer_email);
+
+        $mail->isHTML(true);
+        $mail->Subject = 'Your Purchase Is Successful And Secure With MusicTIMeS';
+        $mailContent = "<h1>Your order will be processed by the enterprise.</h1>
+                        <p>Thank you for ordering through MusicTIMeS</p> <br>
+                        <p>Best regards,<br><span style=\"font-weight: bold;\">MusicTIMeS</span></p>";
+        $mail->Body = $mailContent;
+
+        if ($mail->send()) {
+            // Email sent successfully
+            echo "Email sent successfully.";
+        } else {
+            echo "Email could not be sent. Mailer Error: " . $mail->ErrorInfo;
+        }
+    } catch (Exception $e) {
+        echo "Mailer Error: " . $mail->ErrorInfo;
     }
 
     // Redirect to a success page with alert

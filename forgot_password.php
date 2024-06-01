@@ -58,26 +58,20 @@
 
 <div class="forgot_email-form">
     <form action="forgot_email.php" method="post">
-
         <div class="image-container">
             <img src="./image/logo.png" alt="Forgot Image" width="300px" height="100px">
         </div>
-
         <h1>Forgot Password</h1>
-
         <label for="email">Email</label>
-        <input type="text" name="customer_email" id="customer_email">
-
+        <input type="text" name="customer_email" id="customer_email" required>
         <input type="submit" name="submit" value="Verify" style="margin-top: 10px;">
-
-<?php
-if (isset($_GET['error'])) {
-    $error_message = htmlspecialchars($_GET['error']);
-    echo '<p style="color: red;">' . $error_message . '</p>';
-}
-?>
+        <?php
+        if (isset($_GET['error'])) {
+            $error_message = htmlspecialchars($_GET['error']);
+            echo '<p style="color: red;">' . $error_message . '</p>';
+        }
+        ?>
     </form>
-
     <button id="back-button" onclick="window.location.href='index.php'">Back</button>
 </div>
 

@@ -1,9 +1,14 @@
 <?php include './layout/main.php'; ?>
-
 <?php 
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
+
+// Include Composer's autoloader
+require '../vendor/autoload.php';
+
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
 
 if (session_status() == PHP_SESSION_NONE) {
     session_start();
@@ -22,13 +27,35 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $rating = $_POST['selected_rating'];
     $order_id = $_POST['order_id'];
 
+    // Retrieve customer email
+    $customer_email = '';
+    $customer_query = "SELECT customer_email FROM customers WHERE customer_id = ?";
+    $stmt = $conn->prepare($customer_query);
+    $stmt->bind_param("i", $customer_id);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    if ($result->num_rows > 0) {
+        $row = $result->fetch_assoc();
+        $customer_email = $row['customer_email'];
+    } else {
+        echo '<script>alert("Customer email not found."); window.history.back();</script>';
+        exit();
+    }
+    $stmt->close();
+
     $feedback_media = "";
     if ($_FILES['feedback_media']['error'] === UPLOAD_ERR_OK) {
         $uploadDir = '../image/feedback/';
         $uploadFile = $uploadDir . basename($_FILES['feedback_media']['name']);
         if (move_uploaded_file($_FILES['feedback_media']['tmp_name'], $uploadFile)) {
             $feedback_media = $uploadFile;
+        } else {
+            echo '<script>alert("Failed to upload image."); window.history.back();</script>';
+            exit();
         }
+    } else {
+        echo '<script>alert("Failed to upload image."); window.history.back();</script>';
+        exit();
     }
 
     // Check if feedback already exists
@@ -50,10 +77,37 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $stmt->bind_param("iissii", $product_id, $customer_id, $feedback_desc, $feedback_media, $rating, $order_id);
     }
 
-    $stmt->execute();
-    $stmt->close();
+    if ($stmt->execute()) {
+        // Send email notification
+        $mail = new PHPMailer(true);
+        try {
+            $mail->isSMTP();
+            $mail->Host = 'smtp.gmail.com';
+            $mail->Port = 587;
+            $mail->SMTPSecure = 'tls';
+            $mail->SMTPAuth = true;
+            $mail->Username = 'musictimessystem@gmail.com';
+            $mail->Password = 'kppuqpaokzlwtcww';
+            $mail->setFrom('noreply@musictimessystem.com', 'MusicTIMeS');
+            $mail->addAddress($customer_email);
 
-    echo '<script>alert("Feedback submitted successfully!"); window.location.href="customer-feedback.php";</script>';
+            $mail->isHTML(true);
+            $mail->Subject = 'Thank You For Provide Rating to MusicTIMeS';
+            $mailContent = "<h1>Your rating about the order successfully posted, go to Feedback page to see the rating of the order</h1>
+                            <p>Thank you for ordering through MusicTIMeS</p> <br>
+                            <p>Best regards,<br><span style=\"font-weight: bold;\">MusicTIMeS</span></p>";
+            $mail->Body = $mailContent;
+
+            $mail->send();
+            echo '<script>alert("Feedback submitted successfully!"); window.location.href="customer-feedback.php";</script>';
+        } catch (Exception $e) {
+            echo 'Mailer Error: ' . $mail->ErrorInfo;
+        }
+    } else {
+        echo '<script>alert("Failed to submit feedback."); window.history.back();</script>';
+    }
+
+    $stmt->close();
 }
 ?>
 <head>

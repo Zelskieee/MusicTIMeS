@@ -115,11 +115,11 @@
             }
 
             $result = $conn->query($query);
+            $product_count = $result->num_rows;
 
-            if ($result->num_rows > 0) {
+            if ($product_count > 0) {
                 while ($product = $result->fetch_assoc()) {
             ?>
-
                     <div class="col-lg-3 col-md-6 col-2 product-item" style="transition: transform 0.3s ease-in-out;height: 100%;" onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'">
                         <div class="card mb-3" style="height: 98%;" style="height: 98%; transform-origin: center top;">
                             <a href="product-detail.php?id=<?php echo $product['product_id'] ?>">
@@ -168,6 +168,8 @@
 
             <?php
                 }
+            } else {
+                echo "<script>document.getElementById('no-results-message').style.display = 'block';</script>";
             }
             ?>
         </div>

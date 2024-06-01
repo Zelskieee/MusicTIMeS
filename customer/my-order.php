@@ -20,7 +20,7 @@ $query = "SELECT `order`.*, GROUP_CONCAT(p.product_name, ' (', oi.order_quantity
           LEFT JOIN order_item oi ON oi.order_id = `order`.order_id
           LEFT JOIN product p ON p.product_id = oi.product_id
           LEFT JOIN enterprise e ON p.enterprise_id = e.enterprise_id
-          WHERE customer_id = $_SESSION[customer_id]";
+          WHERE customer_id = $_SESSION[customer_id] AND `order`.order_status != 'Cancel'";
 
 // Add search functionality
 if ($search_query) {
@@ -272,10 +272,15 @@ $result = $conn->query($query);
                         console.log(response);
                         if (response.trim() === 'success') {
                             alert('Order cancelled successfully');
-                            // Reload the page or update the UI as needed
-                            window.location.reload();
+                            console.log('Order cancelled, reloading page...');
+                            
+                            // Alternative reload methods
+                            window.location.href = window.location.href;
+                            // OR
+                            // window.location.reload(true); // Forces reload from the server
                         } else {
                             alert('Failed to cancel order');
+                            console.log('test debug');
                         }
                     },
                     error: function (err) {
@@ -289,6 +294,7 @@ $result = $conn->query($query);
         });
     });
 </script>
+
 
 </section>
 </main>
