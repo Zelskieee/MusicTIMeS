@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 29, 2024 at 09:34 AM
+-- Generation Time: Jun 02, 2024 at 02:03 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -74,21 +74,26 @@ CREATE TABLE `customers` (
   `customer_phone` varchar(15) DEFAULT NULL,
   `customer_address` text DEFAULT NULL,
   `customer_status` enum('active','inactive','pending') DEFAULT NULL,
-  `confirm_password` varchar(255) DEFAULT NULL
+  `confirm_password` varchar(255) DEFAULT NULL,
+  `otp` int(6) DEFAULT NULL,
+  `otp_sent_at` timestamp NULL DEFAULT NULL,
+  `verified_at` timestamp NULL DEFAULT NULL,
+  `is_verified` tinyint(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `customers`
 --
 
-INSERT INTO `customers` (`customer_id`, `customer_name`, `customer_username`, `customer_email`, `customer_password`, `customer_image`, `customer_phone`, `customer_address`, `customer_status`, `confirm_password`) VALUES
-(1, 'Arif', 'ArifAzi', 'chojjaarif2002@gmail.com', '$2y$10$r9JpcZMvyuvn8k3PJl46NuV1OYbyKLXAXgzFTc3DEdKpZICZHhdVW', NULL, NULL, NULL, NULL, NULL),
-(6, 'Arif', 'Arif', 'hehe', '$2y$10$or5bHuRlbZbv/ClXTzaCNOpkf3xx0yOZreAUThAZAHgIYqSmO9IuW', NULL, NULL, NULL, NULL, NULL),
-(7, 'customers', 'customer', 'customer@gmail.com', '$2y$10$oTH9PBVRwc.5ICjXCpHzB.iy8DFqULaWYwaWnuvrVseYZoZmDnxZi', NULL, '', '', NULL, NULL),
-(8, 'Arif ', 'Hehe', 'hehe@gmail.com', '$2y$10$7YYXWYSHYgm6eQqRhxtkROOy4prvyzJmlbxskWvlnHtQgpmq1kJke', '', '', '', NULL, NULL),
-(10, 'reza', 'reza', 'reza@gmail.com', '$2y$10$0fdI85l847lDqt5CYysSuumhH8Elkm23mpaOagXquoeZA4hGALHOG', NULL, NULL, NULL, NULL, NULL),
-(12, 'ARIF AZINUDDIN', 'customer001', 'customer001@gmail.com', '$2y$10$kM2/XZ7dFgYGQYHBM3nIauqSS9wP7IrFvK4LwUnxjFUWYUEVKCKau', 'f5b0543854b36a3486adbacf8d14c272.png', '01110794886', '1700 JALAN ANGGERIK 1/10,TAMAN ANGGERIK TENGGARA, BANDAR TENGGARA,', NULL, NULL),
-(13, 'Irfan Don', 'irfan', 'irfan@gmail.com', '$2y$10$Lpu9OhfazEz2cfvkj.nfHeDXs0rUDXjRDeVmwzegCgOxrBePMIYnS', 'f4290941f769b5aa3381ca734d4966c7.png', '', '', NULL, NULL);
+INSERT INTO `customers` (`customer_id`, `customer_name`, `customer_username`, `customer_email`, `customer_password`, `customer_image`, `customer_phone`, `customer_address`, `customer_status`, `confirm_password`, `otp`, `otp_sent_at`, `verified_at`, `is_verified`) VALUES
+(1, 'Arif', 'ArifAzi', 'chojjaarif2002@gmail.com', '$2y$10$r9JpcZMvyuvn8k3PJl46NuV1OYbyKLXAXgzFTc3DEdKpZICZHhdVW', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0),
+(6, 'Arif', 'Arif', 'hehe', '$2y$10$or5bHuRlbZbv/ClXTzaCNOpkf3xx0yOZreAUThAZAHgIYqSmO9IuW', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0),
+(7, 'customers', 'customer', 'customer@gmail.com', '$2y$10$oTH9PBVRwc.5ICjXCpHzB.iy8DFqULaWYwaWnuvrVseYZoZmDnxZi', NULL, '', '', NULL, NULL, NULL, NULL, NULL, 0),
+(8, 'Arif ', 'Hehe', 'hehe@gmail.com', '$2y$10$7YYXWYSHYgm6eQqRhxtkROOy4prvyzJmlbxskWvlnHtQgpmq1kJke', '', '', '', NULL, NULL, NULL, NULL, NULL, 0),
+(10, 'reza', 'reza', 'reza@gmail.com', '$2y$10$0fdI85l847lDqt5CYysSuumhH8Elkm23mpaOagXquoeZA4hGALHOG', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0),
+(12, 'ARIF AZINUDDIN', 'customer001', 'customer001@gmail.com', '$2y$10$kM2/XZ7dFgYGQYHBM3nIauqSS9wP7IrFvK4LwUnxjFUWYUEVKCKau', 'f5b0543854b36a3486adbacf8d14c272.png', '01110794886', '1700 JALAN ANGGERIK 1/10,TAMAN ANGGERIK TENGGARA, BANDAR TENGGARA,', NULL, NULL, NULL, NULL, NULL, 0),
+(13, 'Irfan Don', 'irfan', 'irfan@gmail.com', '$2y$10$Lpu9OhfazEz2cfvkj.nfHeDXs0rUDXjRDeVmwzegCgOxrBePMIYnS', 'f4290941f769b5aa3381ca734d4966c7.png', '', '', NULL, NULL, NULL, NULL, NULL, 0),
+(14, 'Mustaqim', 'mustaqim99', 'arifpresenter@gmail.com', '$2y$10$vJGhNNLvf0f9UaICvQoDhe9Ft6m7d93WHlRuvkIPixVKKgt0DvXom', NULL, NULL, NULL, NULL, NULL, NULL, '2024-06-02 12:00:15', '2024-06-02 12:01:26', 1);
 
 -- --------------------------------------------------------
 
@@ -106,16 +111,20 @@ CREATE TABLE `enterprise` (
   `enterprise_phone` varchar(15) DEFAULT NULL,
   `enterprise_address` text DEFAULT NULL,
   `ssm_certificate` varchar(255) DEFAULT NULL,
-  `confirm_password` varchar(255) DEFAULT NULL
+  `confirm_password` varchar(255) DEFAULT NULL,
+  `otp` int(6) DEFAULT NULL,
+  `otp_sent_at` timestamp NULL DEFAULT NULL,
+  `verified_at` timestamp NULL DEFAULT NULL,
+  `is_verified` tinyint(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `enterprise`
 --
 
-INSERT INTO `enterprise` (`enterprise_id`, `enterprise_name`, `enterprise_username`, `enterprise_email`, `enterprise_password`, `enterprise_image`, `enterprise_phone`, `enterprise_address`, `ssm_certificate`, `confirm_password`) VALUES
-(2, 'Perusahaan Kompang Arif', 'enterprise', 'enterprise@gmail.com', '$2y$10$dgC0x66UFsG8a59dOfI5cOU/1n8vM9aIMufrtt2PtXBWS6OVNtNAC', '7ec2cead1713fdce0aab08c7a08dc33e.png', '', '', NULL, NULL),
-(7, 'Bengkel Muzik', 'bengkel', 'bengkelmuzik@gmail.com', '$2y$10$l8aWRlloILmU/H.v7NRdgez15ZyX7YA4xm8NrYaYzjRVSiX/KtjP.', '48c36427f583019d612c7860ab655b59.png', '', '', 'image/enterprise/Activities SULAM_compressed.pdf', NULL);
+INSERT INTO `enterprise` (`enterprise_id`, `enterprise_name`, `enterprise_username`, `enterprise_email`, `enterprise_password`, `enterprise_image`, `enterprise_phone`, `enterprise_address`, `ssm_certificate`, `confirm_password`, `otp`, `otp_sent_at`, `verified_at`, `is_verified`) VALUES
+(2, 'Perusahaan Kompang Arif', 'enterprise', 'enterprise@gmail.com', '$2y$10$dgC0x66UFsG8a59dOfI5cOU/1n8vM9aIMufrtt2PtXBWS6OVNtNAC', '7ec2cead1713fdce0aab08c7a08dc33e.png', '', '', NULL, NULL, NULL, NULL, NULL, 0),
+(7, 'Bengkel Muzik', 'bengkel', 'bengkelmuzik@gmail.com', '$2y$10$l8aWRlloILmU/H.v7NRdgez15ZyX7YA4xm8NrYaYzjRVSiX/KtjP.', '48c36427f583019d612c7860ab655b59.png', '', '', 'image/enterprise/Activities SULAM_compressed.pdf', NULL, NULL, NULL, NULL, 0);
 
 -- --------------------------------------------------------
 
@@ -397,7 +406,7 @@ ALTER TABLE `category`
 -- AUTO_INCREMENT for table `customers`
 --
 ALTER TABLE `customers`
-  MODIFY `customer_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `customer_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- AUTO_INCREMENT for table `enterprise`

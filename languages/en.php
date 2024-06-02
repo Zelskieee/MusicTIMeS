@@ -148,6 +148,8 @@ return [
     'ongoing_orders' => 'Ongoing Orders',
     'canceled_orders' => 'Canceled Orders',
     'total_sales' => 'Total Sales',
-    'total_products' => 'Total Products',
-    'total_feedback' => 'Total Feedback'
+    'total_products' => 'Product Added',
+    'total_feedback' => 'Feedback Rated',
+    'graph' => 'No sales found in the specified date range',
+    'no_payment' => 'No payment found'
 ];

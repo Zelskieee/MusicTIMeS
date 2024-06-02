@@ -357,7 +357,7 @@ $status_data = $status_result->fetch_assoc();
                             }
                         });
                     } else {
-                        document.getElementById('salesGraphContainer').innerHTML = 'No sales found in the specified date range.';
+                        document.getElementById('salesGraphContainer').innerHTML = '<i class="fa-solid fa-face-sad-tear fa-beat-fade" style="color: red;"></i> <span style="color: red; font-size: 16px;"><?php echo __('graph') ?></span>';
                     }
                 </script>
             </div>
@@ -382,7 +382,7 @@ $status_data = $status_result->fetch_assoc();
                     echo "</tbody>";
                     echo "</table>";
                 } else {
-                    echo "<div class='no-data-found'><i class='fa-solid fa-face-frown fa-beat'></i><div> No data found.</div></div>";
+                    echo "<div class='no-data-found'><i class='fa-solid fa-face-sad-tear fa-beat-fade'></i> " . " &nbsp " . __('no_data') . "</div>";
                 }
                 ?>
             </div>

@@ -63,9 +63,18 @@
                     $customerImagePath = '/musictimes/image/customer/' . $customer['customer_image'];
                     $defaultImagePath = '/musictimes/image/default-customer.png';
 
-                    $imageSrc = file_exists($_SERVER['DOCUMENT_ROOT'] . $customerImagePath) ? $customerImagePath : $defaultImagePath;
-                    ?>
-                    <img style="width: 200px; height: 200px; margin-bottom: 10px;" src="<?= $imageSrc ?>" alt="Customer image">
+                    // Construct the full server paths for checking file existence
+                    $fullCustomerImagePath = $_SERVER['DOCUMENT_ROOT'] . $customerImagePath;
+                    $fullDefaultImagePath = $_SERVER['DOCUMENT_ROOT'] . $defaultImagePath;
+
+                    // Check if the customer image file exists
+                    if (file_exists($fullCustomerImagePath) && !empty($customer['customer_image'])) {
+                        $imageSrc = $customerImagePath;
+                    } else {
+                        $imageSrc = $defaultImagePath;
+                    }
+                ?>
+                <img style="width: 200px; height: 200px; margin-bottom: 10px;" src="<?= $imageSrc ?>" alt="Customer image">
                 <input type="file" name="image" accept="image/*" class="form-control">
             </div>
             <div class="mb-2">
@@ -86,8 +95,8 @@
 
             </div>
             <div class="mb-2">
-                <label class="form-label" style="font-weight: bold;"><?php echo __('customer_address')?></label>
-                <textarea name="customer_address" cols="30" rows="10"  class="form-control" placeholder="Enter Address"><?=$customer['customer_address']?></textarea>
+                <label class="form-label" style="font-weight: bold;"><?php echo __('customer_address')?><span style="color: red;">*</span></label>
+                <textarea name="customer_address" cols="30" rows="10"  class="form-control" placeholder="Enter Address" required><?=$customer['customer_address']?></textarea>
             </div>
             <div class="mb-2">
                 <button type="submit" class="btn btn-secondary"><i class="fa-solid fa-circle-check fa-beat-fade"></i><strong> <?php echo __('submit')?></strong></button>

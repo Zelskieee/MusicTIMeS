@@ -149,6 +149,8 @@ return [
     'ongoing_orders' => 'Pesanan Sedang Berlangsung',
     'canceled_orders' => 'Pesanan Dibatalkan',
     'total_sales' => 'Jumlah Jualan',
-    'total_products' => 'Jumlah Produk',
-    'total_feedback' => 'Jumlah Maklum Balas'
+    'total_products' => 'Produk Ditambah',
+    'total_feedback' => 'Maklum Balas Dinilai',
+    'graph' => 'Tiada jualan ditemui dalam julat tarikh yang ditetapkan',
+    'no_payment' => 'Tiada pembayaran dijumpai'
 ];

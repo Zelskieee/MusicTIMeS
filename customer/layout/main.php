@@ -8,7 +8,6 @@ if (!isset($_SESSION['customer_id'])) {
     exit;
 }
 
-
 ?>
 
 <?php
@@ -46,7 +45,7 @@ function __($key) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" href="../image/logo.ico" type="image/x-icon">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
+    <script src="https://kit.fontawesome.com/641ebcf430.js" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="../style/sidebar_enterprise.css">
     <link rel="stylesheet" href="../style/customer_main.css">
     <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
@@ -127,7 +126,7 @@ function __($key) {
         <div class="profile-option" style="background-color: #F8F6F0;">
             <?php 
                 $customer_username = $_SESSION['customer_username'];
-                $query = "SELECT customer_name, customer_image FROM customers WHERE customer_username='$customer_username'";
+                $query = "SELECT customer_name, customer_image, customer_address FROM customers WHERE customer_username='$customer_username'";
                 $result = $conn->query($query);
                 $customer = $result->fetch_assoc();
             ?>
@@ -258,6 +257,7 @@ function __($key) {
                             style="width:100%; font-weight: bold; background-color: black; border: solid 1px black; color: white;"
                             onmouseover="this.style.backgroundColor='white'; this.style.color='black'; this.style.border='solid 1px black';"
                             onmouseout="this.style.backgroundColor='black'; this.style.color='white'; this.style.border='solid 1px black';"
+                            onclick="return handleCheckout()"
                         >
                             <i class="fa-regular fa-credit-card fa-bounce"></i> <?php echo __('checkout'); ?>
                         </button>
@@ -273,6 +273,7 @@ function __($key) {
             var checkoutButton = document.getElementById('checkoutButton');
             var checkoutLink = document.getElementById('checkoutLink');
             var totalQuantity = <?php echo $totalQuantity; ?>;
+
             if (totalQuantity === 0) {
                 checkoutButton.disabled = true;
                 checkoutButton.style.backgroundColor = 'grey';
@@ -281,6 +282,16 @@ function __($key) {
                 checkoutLink.style.type = 'hidden';
             }
         });
+
+        function handleCheckout() {
+            var customerAddress = "<?php echo $customer['customer_address']; ?>";
+            if (!customerAddress) {
+                alert("Must Enter Your Address Before Checkout");
+                window.location.href = "./customer-profile.php";
+                return false; // Prevent default action
+            }
+            return true; // Allow default action
+        }
         </script>
 
         <script>

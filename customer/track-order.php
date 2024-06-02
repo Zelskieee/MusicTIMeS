@@ -204,7 +204,14 @@ $result = $conn->query($query);
                 <td class="text-center"><?php echo $enterpriseNamesStr; ?></td>
                 <td class="text-center"><?php echo $orderItemsStr; ?></td>
                 <td class="text-center"><?php echo $customer['tracking_number']; ?></td>
-                <td class="text-center"><?php echo $customer['order_status'] ?? 'Pending'; ?></td>
+                <td class="text-center">
+                    <?php
+
+                    if (isset($customer['order_status']) && $customer['order_status'] === 'Shipping') {
+                        echo __('ship');
+                    }
+                    ?>
+                </td>
                 <td class="text-center" style="width:300px; height: 200px;">
                     <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d127482.66733710174!2d101.60458777899329!3d3.138674073378546!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x31cc362abd08e7d3%3A0x232e1ff540d86c99!2sKuala%20Lumpur%2C%20Federal%20Territory%20of%20Kuala%20Lumpur!5e0!3m2!1sen!2smy!4v1711816032867!5m2!1sen!2smy" width="300" height="200" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
                 </td>

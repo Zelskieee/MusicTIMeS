@@ -187,9 +187,9 @@
                         <td colspan="5">
                             <?php 
                             if ($payment_method_filter == 'Online Banking') {
-                                echo __('No data found');
+                                echo __('no_data');
                             } else {
-                                echo __('No payment found');
+                                echo "<i class='fa-solid fa-face-sad-tear fa-beat-fade' style='color: red;'></i><span style='color: red; font-size: 16px;'>" . __('no_payment') . "</span>";
                             }
                             ?>
                         </td>
