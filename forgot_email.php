@@ -41,7 +41,7 @@ if (isset($_POST['submit'])) {
 
             $mail->isHTML(true);
             $mail->Subject = 'Your OTP Code for MusicTIMeS Forgot Password';
-            $mail->Body = 'Your OTP code is: ' . $otp;
+            $mail->Body = 'Your OTP code is <strong>' . $otp . '</strong>';
 
             if ($mail->send()) {
                 header("Location: input_otp_change_password.php?customer_email=" . urlencode($customer_email));

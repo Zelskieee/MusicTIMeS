@@ -114,12 +114,12 @@
     <h3>OTP Code has been sent to <span style="color: grey; font-weight: bold; font-size: 18px;">@<?php echo htmlspecialchars($_GET['enterprise_email']); ?></span></h3>
     <label for="otp">Enter OTP Code <span style="color: red;">*</span></label>
     <div class="otp-input">
-        <input type="text" name="otp1" maxlength="1" required>
-        <input type="text" name="otp2" maxlength="1" required>
-        <input type="text" name="otp3" maxlength="1" required>
-        <input type="text" name="otp4" maxlength="1" required>
-        <input type="text" name="otp5" maxlength="1" required>
-        <input type="text" name="otp6" maxlength="1" required>
+        <input type="text" autocomplete="one-time-code" name="otp1" maxlength="1" required>
+        <input type="text" autocomplete="one-time-code" name="otp2" maxlength="1" required>
+        <input type="text" autocomplete="one-time-code" name="otp3" maxlength="1" required>
+        <input type="text" autocomplete="one-time-code" name="otp4" maxlength="1" required>
+        <input type="text" autocomplete="one-time-code" name="otp5" maxlength="1" required>
+        <input type="text" autocomplete="one-time-code" name="otp6" maxlength="1" required>
     </div>
     <input type="hidden" name="otp" id="otp">
     <input type="hidden" name="enterprise_email" value="<?php echo htmlspecialchars($_GET['enterprise_email']); ?>">

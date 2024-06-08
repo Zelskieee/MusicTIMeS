@@ -49,7 +49,7 @@ if (isset($_GET['customer_email'])) {
 
             $mail->isHTML(true);
             $mail->Subject = 'Your OTP Code for MusicTIMeS Account Registration';
-            $mailContent = "<h1>MusicTIMeS</h1><p>Your OTP code is {$otp}</p>";
+            $mailContent = "<h1>MusicTIMeS</h1><p>Your OTP code is <strong>{$otp}</strong></p>";
             $mail->Body = $mailContent;
 
             if ($mail->send()) {

@@ -120,7 +120,7 @@ use PHPMailer\PHPMailer\Exception;
             )";
 
         if ($order_status_filter) {
-            $query .= " AND `order`.order_status = '$order_status_filter'";
+            $query .= " AND LOWER(`order`.order_status) = LOWER('$order_status_filter')";
         }
 
         if ($search_query) {
@@ -265,6 +265,8 @@ use PHPMailer\PHPMailer\Exception;
                                         echo '<span style="font-weight: bold; font-size: 18px;">' . __('preparing') . '</span>';
                                     } else if ($order['order_status'] == 'Shipping') {
                                         echo '<span style="font-weight: bold; font-size: 18px;">' . __('ship') . '</span>';
+                                    } else if ($order['order_status'] == 'Cancel') {
+                                        echo '<span style="color: red; font-weight: bold; font-size: 18px;">' . __('cancel') . '</span>';
                                     }
                                 ?>
                             </td>
